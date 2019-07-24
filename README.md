@@ -1,6 +1,6 @@
 # react-practice
 
-#Sources and inspiration:
+# Sources and inspiration:
 
 https://www.udemy.com/react-redux/
 
