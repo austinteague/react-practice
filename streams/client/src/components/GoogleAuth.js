@@ -1,4 +1,8 @@
+// This is NOT super optimal or close to Redux conventions but it clearly shows oAuth flow in a single component #forLearning
+
 import React from 'react';
+import { connect } from 'react-redux';
+import { signIn, signOut } from '../actions';
 
 class GoogleAuth extends React.Component {
   state = { isSignedIn: null };
@@ -17,8 +21,20 @@ class GoogleAuth extends React.Component {
   }
 
   // Arrow func because it's used in a callback and we want to maintain context
-  _onAuthChange = () => {
-    this.setState({ isSignedIn: this.auth.isSignedIn.get() });
+  _onAuthChange = (isSignedIn) => {
+    if (isSignedIn) {
+      this.props.signIn();
+    } else {
+      this.props.signOut();
+    }
+  };
+
+  _onSignInClick = () => {
+    this.auth.signIn();
+  };
+
+  _onSignOutClick = () => {
+    this.auth.signOut();
   };
 
   _renderAuthButton() {
@@ -26,14 +42,14 @@ class GoogleAuth extends React.Component {
       return null;
     } else if (this.state.isSignedIn) {
       return (
-        <button className="ui red google button">
+        <button onClick={this._onSignOutClick} className="ui red google button">
           <i className="google icon" />
           Sign Out
         </button>
       );
     } else {
       return (
-        <button className="ui green google button">
+        <button onClick={this._onSignInClick} className="ui green google button">
           <i className="google icon" />
           Sign In
         </button>
@@ -50,4 +66,4 @@ class GoogleAuth extends React.Component {
   }
 }
 
-export default GoogleAuth;
+export default connect(null, { signIn, signOut })(GoogleAuth);
